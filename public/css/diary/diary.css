@@ -1,0 +1,14 @@
+.diary{
+    background-image: url(../img/income/去月球.png); 
+    background-size: 100% 100%;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+    font-family: "Ma Shan Zheng", "STKaiti", "KaiTi", serif;
+}
+.diary-data-card{
+    border:2px solid #a1d456; border-radius: 8px; opacity: 0.8; background-color:#e6fdb8; width:92vw; color: black; margin-bottom:1vh; margin-left:4vw;;
+}
+.diary-data-card-button{
+    background-color:#e6fdb8; color:#000000;
+}
