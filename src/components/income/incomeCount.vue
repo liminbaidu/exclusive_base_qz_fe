@@ -54,7 +54,9 @@
                 tipVisible:false,
                 tip:'',
                 isShowTab:'1',
-                countTypeTab:'1'
+                countTypeTab:'1',
+                url:"",
+                token:""
             }
         },
         setup() {
@@ -62,13 +64,15 @@
             return { xs,sm,md};
         },
         async mounted(){
+            this.url=localStorage.getItem('url')
+            this.token=localStorage.getItem('token')
             await this.Getincomelist();
         },
         methods:{
             async Getincomelist(type){
                 this.isloading=true;
                 const response = await fetch(
-                    `http://100.81.86.211:8000/income/queryIncome??page=${this.page}&size=${this.size}&token=07b3a50ee98721304338e5027d25e524`,
+                    this.url+`/income/queryIncome??page=${this.page}&size=${this.size}&token=`+this.token,
                     {
                     headers:{
                         "cookie": this.cookie,
@@ -137,7 +141,7 @@
             },
             async incomeDelete(id){
                 const response = await fetch(
-                    `http://100.81.86.211:8000/income/deleteincome?incomeId=${id}&token=07b3a50ee98721304338e5027d25e524`,
+                    this.url+`/income/deleteincome?incomeId=${id}&token=`+this.token,
                     {
                     headers:{
                         "cookie": this.cookie,

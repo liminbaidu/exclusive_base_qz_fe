@@ -58,7 +58,9 @@
                 hasMore:true,
                 tipVisible:false,
                 tip:'',
-                showChild : ref(false)
+                showChild : ref(false),
+                url:"",
+                token:""
             }
         },
         components: {
@@ -73,6 +75,8 @@
             return { xs,sm,md,reset};
         },
         async mounted(){
+            this.url=localStorage.getItem('url')
+            this.token=localStorage.getItem('token')
             await this.Getdiarylist();
         },
         methods:{
@@ -80,7 +84,7 @@
                 this.isloading=true;
                 
                 const response = await fetch(
-                    `http://100.81.86.211:8000/diary/queryDiary?page=${this.page}&size=${this.size}&token=07b3a50ee98721304338e5027d25e524`,
+                    this.url+`/diary/queryDiary?page=${this.page}&size=${this.size}&token=`+this.token,
                     {
                     headers:{
                         "cookie": this.cookie,
@@ -153,7 +157,7 @@
             },
             async diaryDelete(id){
                 const response = await fetch(
-                    `http://100.81.86.211:8000/diary/deleteDiary?diaryId=${id}&token=07b3a50ee98721304338e5027d25e524`,
+                    this.url+`/diary/deleteDiary?diaryId=${id}&token=`+this.token,
                     {
                     headers:{
                         "cookie": this.cookie,

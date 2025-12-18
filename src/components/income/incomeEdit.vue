@@ -1,10 +1,16 @@
 <template>
     <div class="incomeCreate">
-        <v-tooltip style="margin-top: 10vh; justify-content: center;" v-model="tipVisible" target="cursor" open-on-click>
-            <span>{{tip}}</span>
-        </v-tooltip>
         <div>&nbsp</div>
-        <div class="incomeCreate-from" style="margin-top: 10vh; margin-left:10vw; height:63vh; width:80vw;">
+        <v-tooltip style="margin-top: 10vh; justify-content: center;" v-model="tipVisible" target="cursor" open-on-click>
+        </v-tooltip>
+        <v-infinite-scroll
+            ref="scroll"
+            style="margin-top: 4vh;"
+            height="80vh"
+            side="end"
+            @load="load"
+        >
+        <div class="incomeCreate-from" style="margin-top: 10vh; margin-left:10vw; width:80vw;">
             <div>类型</div>
             <v-select
                 style="padding:0px; border-radius: 8px;"
@@ -33,10 +39,11 @@
               density="compact"
               placeholder="请输入内容"
               variant="outlined"
+              hideDetails=""
               style="width:80vw; border-radius: 8px;"
             ></v-textarea>
             <v-btn
-                style="margin-top: 1vh;"
+                style="margin-top: 2vh;"
                 color="blue"
                 size="large"
                 block
@@ -53,6 +60,11 @@
                 取消
             </v-btn>
         </div>
+            <template v-slot:empty>
+                <div>&nbsp</div>
+            </template>
+        </v-infinite-scroll>
+        
     </div>
 </template>
 
@@ -71,7 +83,9 @@
                 incomeRemark:'',
                 incomeAmount:"",
                 incomeSpendTime:'',
-                isShowDate:'1'
+                isShowDate:'1',
+                url:"",
+                token:""
             }
         },
         setup() {
@@ -79,6 +93,8 @@
             return { xs,sm,md};
         },
         async mounted(){
+            this.url=localStorage.getItem('url')
+            this.token=localStorage.getItem('token')
             this.resetincomeInfo()
         },
         methods:{
@@ -89,7 +105,7 @@
                 const incomeAmountS = String(parseFloat(this.incomeAmount)*100);
                 if (this.incomeid!=''){
                     const response = await fetch(
-                        `http://100.81.86.211:8000/income/updateIncome?incomeId=${this.incomeid}&spendType=${incomeTypeV}&remark=${this.incomeRemark}&spendTime=${spendstampS}&amount=${incomeAmountS}&token=07b3a50ee98721304338e5027d25e524`,
+                        this.url+`/income/updateIncome?incomeId=${this.incomeid}&spendType=${incomeTypeV}&remark=${this.incomeRemark}&spendTime=${spendstampS}&amount=${incomeAmountS}&token=`+this.token,
                         {
                         headers:{
                             "cookie": this.cookie,
@@ -109,7 +125,7 @@
                     })
                 }else{
                     const response = await fetch(
-                        `http://100.81.86.211:8000/income/createIncome?spendType=${incomeTypeV}&remark=${this.incomeRemark}&spendTime=${spendstampS}&amount=${incomeAmountS}&token=07b3a50ee98721304338e5027d25e524`,
+                        this.url+`/income/createIncome?spendType=${incomeTypeV}&remark=${this.incomeRemark}&spendTime=${spendstampS}&amount=${incomeAmountS}&token=`+this.token,
                         {
                         headers:{
                             "cookie": this.cookie,
@@ -155,6 +171,9 @@
                 localStorage.setItem('incomeRemark', '')
                 localStorage.setItem('incomeAmount', '')
                 localStorage.setItem('incomeSpendTime', '')
+            },
+            load ({ done }) {
+                done('empty');
             },
             handleInput(){
                 let value = this.incomeAmount.replace(/[^-0-9.]/g, '');

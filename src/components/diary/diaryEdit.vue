@@ -43,7 +43,9 @@
                 diaryid:ref(''),
                 diarydate:ref(''),
                 tip:'',
-                isShowDate:'2'
+                isShowDate:'2',
+                url:"",
+                token:""
             }
         },
         setup() {
@@ -51,6 +53,8 @@
             return { xs,sm,md};
         },
         async mounted(){
+            this.url=localStorage.getItem('url')
+            this.token=localStorage.getItem('token')
             this.resetDiaryInfo()
         },
         methods:{
@@ -58,7 +62,7 @@
                 this.isloading=true;
                 if (this.diaryid!=''){
                     const response = await fetch(
-                        `http://100.81.86.211:8000/diary/updateDiary?DiaryId=${this.diaryid}&content=${this.diarydate}&token=07b3a50ee98721304338e5027d25e524`,
+                        this.url+`/diary/updateDiary?DiaryId=${this.diaryid}&content=${this.diarydate}&token=`+this.token,
                         {
                         headers:{
                             "cookie": this.cookie,
@@ -80,7 +84,7 @@
                     })
                 }else{
                     const response = await fetch(
-                        `http://100.81.86.211:8000/diary/createDiary?content=${this.diarydate}&token=07b3a50ee98721304338e5027d25e524`,
+                        this.url+`/diary/createDiary?content=${this.diarydate}&token=`+this.token,
                         {
                         headers:{
                             "cookie": this.cookie,

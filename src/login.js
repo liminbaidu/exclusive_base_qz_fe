@@ -10,12 +10,12 @@ import { getCookie } from './utils/cookieUtils.js';
 import { setMeta,getFormattedTime,getFormattedDate,dataConsole } from './utils/common.js';
 import { useDisplay } from 'vuetify'
 import { reactive, ref } from 'vue'
+import config from './config.js';
 
 
 export default {
   setup() {
     const { xs,sm,md } = useDisplay();
-    const debug = ref('Hello Vue!');
     return { xs,sm,md };
   },
   data(){
@@ -26,6 +26,7 @@ export default {
       }),
       islogin:false,
       isloading:false,
+      configdata: config,
       qztoken:"",
       LoginErr:"",
       toggle_none: null,
@@ -37,7 +38,7 @@ export default {
       this.isloading=true
       console.log(this.form);
       const response = await fetch(
-        `http://10.254.242.168:8000/common/login?user=${this.form.user}&password=${this.form.password}&token=${this.qztoken}`,
+        this.configdata.url+`/common/login?user=${this.form.user}&password=${this.form.password}&token=${this.qztoken}`,
         {
           headers:{
             "cookie": this.cookie,
@@ -47,6 +48,8 @@ export default {
       response.json().then((logresp)=>{
         if (logresp['BaseResp']['StatusCode']==0) {
           this.qztoken = logresp['token'];
+          localStorage.setItem('token', this.qztoken)
+          window.open('/', '_self')
         }else{
           this.LoginErr=logresp['BaseResp']['StatusMessage'];
         }

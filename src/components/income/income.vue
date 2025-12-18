@@ -70,7 +70,9 @@
                 tipVisible:false,
                 isShowDate:"1",
                 tip:'',
-                spendtypelist:{'交通':'1', '购物':'2', '食物':'3', '房租':'4', '转账':'5'}
+                spendtypelist:{'交通':'1', '购物':'2', '食物':'3', '房租':'4', '转账':'5'},
+                url:"",
+                token:""
             }
         },
         setup() {
@@ -85,9 +87,9 @@
             incomeEdit
         },
         async mounted(){
-            await this.Getincomelist();
+            this.url=localStorage.getItem('url')
+            this.token=localStorage.getItem('token')
         },
-        
         methods:{
             parentMethod(isShowDate) {
                 this.isShowDate=isShowDate
@@ -103,7 +105,7 @@
                 this.isloading=true;
                 
                 const response = await fetch(
-                    `http://100.81.86.211:8000/income/queryIncome?page=${this.page}&size=${this.size}&token=07b3a50ee98721304338e5027d25e524`,
+                    this.url+`/income/queryIncome?page=${this.page}&size=${this.size}&token=`+this.token,
                     {
                     headers:{
                         "cookie": this.cookie,
@@ -165,7 +167,7 @@
             },
             async incomeDelete(id){
                 const response = await fetch(
-                    `http://100.81.86.211:8000/income/deleteIncome?incomeId=${id}&token=07b3a50ee98721304338e5027d25e524`,
+                    this.url+`/income/deleteIncome?incomeId=${id}&token=`+this.token,
                     {
                     headers:{
                         "cookie": this.cookie,

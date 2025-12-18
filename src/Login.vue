@@ -4,8 +4,8 @@
       <div
         class="login-card" type="flex"
       >
-          <v-tooltip style="margin-top: 10vh; justify-content: center;" v-model="loginTipVisible" target="cursor" open-on-click>
-            <span>{{loginTip}}</span>
+          <v-tooltip style="margin-top: 10vh;  justify-content: center;height:10vh" v-model="loginTipVisible" target="cursor" open-on-click>
+            <span >{{logintip}}</span>
           </v-tooltip>
           <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">用户名</div>
           <v-text-field
@@ -68,7 +68,7 @@
         text: 'left',
         token:"",
         loginTipVisible:false,
-        logintip:"",
+        logintip:ref(""),
       }
     },
     methods: {
@@ -87,7 +87,7 @@
             this.islogin = true;
             this.qztoken = logresp['token'];
             this.setToken(this.qztoken);
-            window.open('/home', '_self')
+            window.open('/', '_self')
           }else{
             this.logintip=logresp['BaseResp']['StatusMessage'];
             console.log(this.logintip);
@@ -96,7 +96,7 @@
           }
         })
         this.isloading=false
-        this.setloginTipVisible();
+        // this.setloginTipVisible();
       },
       async setToken(token){
         localStorage.setItem('token', token)

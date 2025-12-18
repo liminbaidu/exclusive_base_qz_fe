@@ -62,6 +62,7 @@ const config = {
 		"你看到了吗？你的独一无二，是如此的弥足珍贵",
 		"晚安咯，希望今天你也是开心地睡着"
 	],
+	url:"http://100.81.86.211:8000",
 
 	//音乐播放配置，采用MetingJS Api(https://github.com/metowolf/MetingJS)
 	musicPlayer: {

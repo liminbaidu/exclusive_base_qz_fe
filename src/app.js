@@ -83,6 +83,8 @@ export default {
       this.bottomtab=localStorage.getItem('bottomtab')
       this.isShowTab=localStorage.getItem('bottomtab')
     }
+    localStorage.setItem('url', this.configdata.url)
+    console.log(this.configdata.url)
     localStorage.setItem('bottomtab', '1')
     if(import.meta.env.VITE_CONFIG){
       this.configdata = JSON.parse(import.meta.env.VITE_CONFIG);
