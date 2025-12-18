@@ -1,12 +1,13 @@
 <template>
-    <div class="diary">
+    <div v-if="isShowDate=='1'"><diaryEdit ref="diaryEdit" @child-click="parentMethod"></diaryEdit></div>
+    <div v-show="isShowDate=='2'" class="diary">
         <v-tooltip style="margin-top: 10vh; justify-content: center;" v-model="tipVisible" target="cursor" open-on-click>
             <span>{{tip}}</span>
         </v-tooltip>
         <div class="diary-select" style="margin-top: 0vh; height:10vh">
             <div style="height:8vh"></div>
             <v-btn
-                style="margin-left: 70vw; height:4vh; background-color:#e6fdb8; "
+                style="margin-left: 65vw; margin-top: 1vw; width:30vw; height:4vh; background-color:#FFFFFF; "
                 class="text-none"
                 variant="text"
                 @click="diaryCreate()"
@@ -18,12 +19,13 @@
         
         <div class="diary-data" style="color: black;" >
             <v-infinite-scroll
+                ref="scroll"
                 style="margin-top: 2.5vh;"
                 height="80vh"
                 side="end"
                 @load="load"
             >
-                <template v-for="(diary, index) in diarylist" :key="diary['diaryId']">
+                <template v-for="(diary, _) in diarylist" :key="diary['diaryId']">
                     <div >
                         <v-card class="diary-data-card" variant="text" :subtitle="timestamptoString(diary['postTime'])" :text="diary['content']">
                             <v-divider></v-divider>
@@ -33,7 +35,7 @@
                     </div>
                 </template>
                 <template v-slot:empty>
-                    <v-card style="color: black;">没有更多数据了哦</v-card>
+                    <v-card style="background-color:#FFFFFF; opacity: 0.75; color: #000000;">没有更多数据了哦</v-card>
                 </template>
             </v-infinite-scroll>
         </div>
@@ -42,21 +44,33 @@
 
 <script>
     import { useDisplay } from 'vuetify'
+    import diaryEdit from './diary/diaryEdit.vue'
+    import { ref, useTemplateRef,reactive } from 'vue'
     export default {
         data(){
             return{
-                diarylist:[],
+                isShowDate:'2',
+                aa:'3',
+                diarylist:ref([]),
                 isloading:false,
                 page:1,
                 size:10,
                 hasMore:true,
                 tipVisible:false,
                 tip:'',
+                showChild : ref(false)
             }
+        },
+        components: {
+            diaryEdit
         },
         setup() {
             const { xs,sm,md } = useDisplay();
-            return { xs,sm,md};
+            const infiniteScrollRef = useTemplateRef('scroll')
+            function reset (side) {
+                infiniteScrollRef.value?.reset(side)
+            }
+            return { xs,sm,md,reset};
         },
         async mounted(){
             await this.Getdiarylist();
@@ -90,6 +104,7 @@
                 this.isloading=false
             },
             load ({ done }) {
+                console.log(done)
                 console.log("load"+this.hasMore)
                 if (this.hasMore==false){
                     done('empty');
@@ -117,13 +132,24 @@
                 return datestring;
             },
             async diaryCreate(){
-                console.log("22")
-                window.open('/#/diary/edit', '_self')
+                diaryEdit.methods.unsetDiaryInfo()
+                this.isShowDate='1'
+            },
+            parentMethod(isShowDate) {
+                this.isShowDate=isShowDate
+                this.resetdate()
+            },
+            resetdate(){
+                this.hasMore=true
+                this.page=1
+                this.diarylist.length=0
+                this.Getdiarylist()
+                this.reset()
             },
             async diaryEdit(id,data){
                 localStorage.setItem('diaryid', id)
-                localStorage.setItem('diarydata', data)
-                window.open('/#/diary/edit', '_self')
+                localStorage.setItem('diarydate', data)
+                this.isShowDate='1'
             },
             async diaryDelete(id){
                 const response = await fetch(
@@ -136,8 +162,7 @@
                 )
                 response.json().then((resp)=>{
                     if (resp['BaseResp']['StatusCode']==0) {
-                        localStorage.setItem('bottomtab', '2')
-                        window.open('/', '_self')
+                        this.resetdate()
                     }else{
                         this.tip=resp['BaseResp']['StatusMessage'];
                         this.tipVisible=true;

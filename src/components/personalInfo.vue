@@ -35,9 +35,6 @@
                 </transition>
             </v-avatar>
             <typewriter :style="xs||sm?{'margin-top': '5vh','width':'90vw','font-size':'2rem'}:{'display':'none'}"></typewriter>
-            <!-- <div class="leleo-left-chart">
-                <polarchart :style="xs||sm?{'height':'210px'}:{'height':'270px'}"/>
-            </div> -->
             <v-card class="ma-5 pa-2 leleo-left-card" variant="tonal" :max-width="xs?270:300" style="text-align: center;">
                 <template v-slot:title>
                     <span>特性</span>

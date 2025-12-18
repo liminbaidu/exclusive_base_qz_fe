@@ -1,5 +1,5 @@
 <template>
-    <div class="income">
+    <div v-if='isShowDate=="1"' class="income">
         <v-tooltip style="margin-top: 10vh; justify-content: center;" v-model="tipVisible" target="cursor" open-on-click>
             <span>{{tip}}</span>
         </v-tooltip>
@@ -18,12 +18,13 @@
         
         <div class="income-data" style="color: black;" >
             <v-infinite-scroll
+                ref="scroll"
                 style="margin-top: 4vh;"
                 height="80vh"
                 side="end"
                 @load="load"
             >
-                <template v-for="(income, index) in incomelist" :key="income['incomeId']">
+                <template v-for="(income, _) in incomelist" :key="income['incomeId']">
                     <div >
                         <v-card class="income-data-card" variant="text" :subtitle="timestamptoString(income['spendTime'])">
                             <v-row style="margin-left: 5vw; margin-top: 1vh; height:12vh;">
@@ -49,31 +50,55 @@
             </v-infinite-scroll>
         </div>
     </div>
+    <div v-if='isShowDate=="2"' class="incomeEdit">
+        <incomeEdit @child-click="parentMethod"></incomeEdit>
+    </div>
 </template>
 
 <script>
     import { useDisplay } from 'vuetify'
+    import incomeEdit from './incomeEdit.vue'
+    import { ref, useTemplateRef } from 'vue'
     export default {
         data(){
             return{
-                incomelist:[],
+                incomelist:ref([]),
                 isloading:false,
                 page:1,
                 size:10,
                 hasMore:true,
                 tipVisible:false,
+                isShowDate:"1",
                 tip:'',
                 spendtypelist:{'交通':'1', '购物':'2', '食物':'3', '房租':'4', '转账':'5'}
             }
         },
         setup() {
+            const infiniteScrollRef = useTemplateRef('scroll')
+            function reset (side) {
+                infiniteScrollRef.value?.reset(side)
+            }
             const { xs,sm,md } = useDisplay();
-            return { xs,sm,md};
+            return { xs,sm,md,reset};
+        },
+        components: {
+            incomeEdit
         },
         async mounted(){
             await this.Getincomelist();
         },
+        
         methods:{
+            parentMethod(isShowDate) {
+                this.isShowDate=isShowDate
+                this.resetdate()
+            },
+            resetdate(){
+                this.hasMore=true
+                this.page=1
+                this.incomelist.length=0
+                this.reset()
+            },
             async Getincomelist(){
                 this.isloading=true;
                 
@@ -109,6 +134,8 @@
                 }
                 setTimeout(() => {
                     if (this.page==1 && this.incomelist.length!=0){
+                        this.incomelist.length=0
+                        this.Getincomelist()
                         done('empty');
                         return;
                     }
@@ -126,7 +153,7 @@
                 return datestring;
             },
             async incomeCreate(){
-                window.open('/#/income/edit', '_self')
+                this.isShowDate='2'
             },
             async incomeEdit(id,incomeType,incomeRemark,incomeAmount,incomeSpendTime){
                 localStorage.setItem('incomeid', id)
@@ -134,7 +161,7 @@
                 localStorage.setItem('incomeRemark', incomeRemark)
                 localStorage.setItem('incomeAmount', incomeAmount)
                 localStorage.setItem('incomeSpendTime', incomeSpendTime)
-                window.open('/#/income/edit', '_self')
+                this.isShowDate='2'
             },
             async incomeDelete(id){
                 const response = await fetch(
@@ -147,8 +174,7 @@
                 )
                 response.json().then((resp)=>{
                     if (resp['BaseResp']['StatusCode']==0) {
-                        localStorage.setItem('bottomtab', '3')
-                        window.open('/', '_self')
+                        this.resetdate()
                     }else{
                         this.tip=resp['BaseResp']['StatusMessage'];
                         this.tipVisible=true;

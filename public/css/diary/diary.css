@@ -7,8 +7,8 @@
     font-family: "Ma Shan Zheng", "STKaiti", "KaiTi", serif;
 }
 .diary-data-card{
-    border:2px solid #a1d456; border-radius: 8px; opacity: 0.8; background-color:#e6fdb8; width:92vw; color: black; margin-bottom:1vh; margin-left:4vw;;
+    border:2px solid #e4f3ff; border-radius: 8px; opacity: 0.75; background-color:#FFFFFF; width:92vw; color: black; margin-bottom:1vh; margin-left:4vw;;
 }
 .diary-data-card-button{
-    background-color:#e6fdb8; color:#000000;
+    background-color:#fbf6bf; color:#000000;
 }

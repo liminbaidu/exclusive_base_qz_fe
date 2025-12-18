@@ -13,12 +13,12 @@
         合计
       </v-btn>
     </v-btn-toggle>
-    <div v-show="isShowTab==1 &&!isloading && !isClearScreen" :style="xs||sm?{'overflow-y': 'auto','overflow-x': 'hidden'}:{}">
-        <income></income>
-    </div>
-    <div v-show="isShowTab==2">
-        <incomeCount></incomeCount>
-    </div>
+  <div v-if="isShowTab==1 &&!isloading && !isClearScreen" :style="xs||sm?{'overflow-y': 'auto','overflow-x': 'hidden'}:{}">
+      <income></income>
+  </div>
+  <div v-if="isShowTab==2">
+      <incomeCount></incomeCount>
+  </div>
 </template>
 
 <script>

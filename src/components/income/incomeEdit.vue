@@ -4,7 +4,7 @@
             <span>{{tip}}</span>
         </v-tooltip>
         <div>&nbsp</div>
-        <div class="incomeCreate-from" style="margin-top: 10vh; margin-left:10vw; height:48vh; width:80vw;">
+        <div class="incomeCreate-from" style="margin-top: 10vh; margin-left:10vw; height:63vh; width:80vw;">
             <div>类型</div>
             <v-select
                 style="padding:0px; border-radius: 8px;"
@@ -36,23 +36,22 @@
               style="width:80vw; border-radius: 8px;"
             ></v-textarea>
             <v-btn
-                style="margin-top: 0vh;"
-                class="mb-8"
+                style="margin-top: 1vh;"
                 color="blue"
                 size="large"
                 block
                 @click="incomeEdit()"
-          >
-            上传
-          </v-btn>
-          <v-btn
+            >
+                上传
+            </v-btn>
+            <v-btn
                 color="blue"
                 block
-                style="margin-top: 2vh; opacity: 0.85;"
+                style="margin-top: 1vh; opacity: 0.85;"
                 @click="incomeCancel()"
-          >
-            取消
-          </v-btn>
+            >
+                取消
+            </v-btn>
         </div>
     </div>
 </template>
@@ -71,7 +70,8 @@
                 incomeType:'交通',
                 incomeRemark:'',
                 incomeAmount:"",
-                incomeSpendTime:''
+                incomeSpendTime:'',
+                isShowDate:'1'
             }
         },
         setup() {
@@ -99,8 +99,7 @@
                     response.json().then((resp)=>{
                         if (resp['BaseResp']['StatusCode']==0) {
                             this.unsetincomeInfo()
-                            localStorage.setItem('bottomtab', '3')
-                            window.open('/', '_self')
+                            this.$emit('child-click', this.isShowDate)
                         }else{
                             this.tip=resp['BaseResp']['StatusMessage'];
                             console.log(this.tip);
@@ -119,8 +118,8 @@
                     )
                     response.json().then((resp)=>{
                         if (resp['BaseResp']['StatusCode']==0) {
-                            localStorage.setItem('bottomtab', '3')
-                            window.open('/', '_self')
+                            this.unsetincomeInfo()
+                            this.$emit('child-click', this.isShowDate)
                         }else{
                             this.tip=resp['BaseResp']['StatusMessage'];
                             console.log(this.tip);
@@ -140,8 +139,15 @@
                 this.incomeid=localStorage.getItem('incomeid')
                 this.incomeType=getKeyByValue(this.incomeTypeJson,localStorage.getItem('incomeType'))
                 this.incomeRemark=localStorage.getItem('incomeRemark')
-                this.incomeAmount=String(parseFloat(localStorage.getItem('incomeAmount'))/100)
-                this.incomeSpendTime=this.timestamptoString(localStorage.getItem('incomeSpendTime'))
+                if (localStorage.getItem('incomeAmount')==""){
+                    this.incomeAmount="0.00"
+                    const secondTimestamp = Math.floor(Date.now() / 1000);
+                    this.incomeSpendTime=this.timestamptoString(secondTimestamp)
+                }else{
+                    this.incomeAmount=String(parseFloat(localStorage.getItem('incomeAmount'))/100)
+                    this.incomeSpendTime=this.timestamptoString(localStorage.getItem('incomeSpendTime'))
+                }
+                
             },
             async unsetincomeInfo(){
                 localStorage.setItem('incomeid', '')
@@ -179,8 +185,7 @@
             },
             async incomeCancel(){
                 this.unsetincomeInfo()
-                localStorage.setItem('bottomtab', '3')
-                window.open('/', '_self')
+                this.$emit('child-click', this.isShowDate)
             }
             
         }

@@ -12,6 +12,7 @@ import App from './App.vue'
 import Login from './Login.vue'
 import DiaryEdit from './components/diary/diaryEdit.vue'
 import IncomeEdit from './components/income/incomeEdit.vue'
+import debug from './components/debug.vue'
 
 const routes = [
   { path: '/', component: App },

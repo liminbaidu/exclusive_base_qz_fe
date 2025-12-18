@@ -11,40 +11,39 @@
               placeholder="请输入内容"
               variant="outlined"
               hideDetails=""
-              style="margin-top: 0vh; height:30vh; width:80vw; background-color:#e6fdb8;"
+              style="margin-top: 0vh; height:30vh; width:80vw; background-color:#FFFFFF; opacity: 0.85;"
             ></v-textarea>
-            <!-- <div style="background-color:#c7e5b4;height:30vh; width:80vw;"></div>
-            <div style="background-color:#f8e1e4;height:30vh; width:80vw;"></div>
-            <div style="background-color:#e0f7fa;height:30vh; width:80vw;"></div> -->
             <v-btn
                 color="blue"
                 block
-                style="margin-top: 2vh; opacity: 0.85;"
+                style="margin-top: 1.5vh; opacity: 0.85;"
                 @click="diaryEdit()"
-          >
-            上传
-          </v-btn>
-          <v-btn
+            >
+                上传
+            </v-btn>
+            <v-btn
                 color="blue"
                 block
-                style="margin-top: 2vh; opacity: 0.85;"
+                style="margin-top: 1.5vh; opacity: 0.85; width:25vw;"
                 @click="diaryCancel()"
-          >
-            取消
-          </v-btn>
+            >
+                取消
+            </v-btn>
         </div>
     </div>
 </template>
 
 <script>
     import { useDisplay } from 'vuetify'
+    import { ref } from 'vue'
     export default {
         data(){
             return{
                 tipVisible:false,
-                diaryid:'',
-                diarydate:'',
+                diaryid:ref(''),
+                diarydate:ref(''),
                 tip:'',
+                isShowDate:'2'
             }
         },
         setup() {
@@ -69,8 +68,9 @@
                     response.json().then((resp)=>{
                         if (resp['BaseResp']['StatusCode']==0) {
                             this.unsetDiaryInfo()
-                            localStorage.setItem('bottomtab', '2')
-                            window.open('/', '_self')
+                            this.$emit('child-click', this.isShowDate)
+                            // localStorage.setItem('bottomtab', '2')
+                            // window.open('/', '_self')
                         }else{
                             this.tip=resp['BaseResp']['StatusMessage'];
                             console.log(this.tip);
@@ -89,8 +89,9 @@
                     )
                     response.json().then((resp)=>{
                         if (resp['BaseResp']['StatusCode']==0) {
-                            localStorage.setItem('bottomtab', '2')
-                            window.open('/', '_self')
+                            this.$emit('child-click', this.isShowDate)
+                            // localStorage.setItem('bottomtab', '2')
+                            // window.open('/', '_self')
                         }else{
                             this.tip=resp['BaseResp']['StatusMessage'];
                             console.log(this.tip);
@@ -106,18 +107,18 @@
                 this.tipVisible=false
                 }, 3000);
             },
-            async resetDiaryInfo(){
+            resetDiaryInfo(){
                 this.diaryid=localStorage.getItem('diaryid')
-                this.diarydate=localStorage.getItem('diarydata')
+                this.diarydate=localStorage.getItem('diarydate')
             },
             async unsetDiaryInfo(){
-                localStorage.setItem('diaryid', '')
-                localStorage.setItem('diarydata', '')
+                this.diaryid=''
+                this.diarydate=''
             },
+            
             async diaryCancel(){
                 this.unsetDiaryInfo()
-                localStorage.setItem('bottomtab', '2')
-                window.open('/', '_self')
+                this.$emit('child-click', this.isShowDate)
             }
             
         }
