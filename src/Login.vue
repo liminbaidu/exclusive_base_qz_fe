@@ -48,6 +48,7 @@
   import { useDisplay } from 'vuetify'
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
+  import config from './config.js';
   const router = useRouter() 
 
   export default {
@@ -62,6 +63,7 @@
         password:'',
         islogin:false,
         isloading:false,
+        configdata: config,
         qztoken:"",
         LoginErr:"",
         toggle_none: null,
@@ -75,7 +77,7 @@
       async loginIn(){
         this.isloading=true
         const response = await fetch(
-          `http://100.81.86.211:8000/common/login?user=${this.user}&password=${this.password}`,
+          this.configdata.url+`/common/login?user=${this.user}&password=${this.password}`,
           {
             headers:{
               "cookie": this.cookie,
