@@ -60,6 +60,7 @@ cd leleo-home-page
 3. 安装依赖：
 
 ```bash
+npm install --package-lock-only
 npm install
 ```
 
