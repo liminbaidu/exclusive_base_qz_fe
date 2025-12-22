@@ -65,6 +65,12 @@ rm -fr node_modules
 npm install
 ```
 
+ss -tulpn | grep :5173
+kill -9 25924
+
+screen -S sync_task
+nohup npm run dev &
+
 4. 启动开发服务器：
 
 ```bash

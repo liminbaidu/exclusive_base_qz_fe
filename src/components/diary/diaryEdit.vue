@@ -72,7 +72,6 @@
                     )
                     response.json().then((resp)=>{
                         if (resp['BaseResp']['StatusCode']==0) {
-                            this.unsetDiaryInfo()
                             this.$emit('child-click', this.isShowDate)
                         }else{
                             this.tip=resp['BaseResp']['StatusMessage'];
@@ -113,15 +112,9 @@
                 this.diaryid=localStorage.getItem('diaryid')
                 this.diarydate=localStorage.getItem('diarydate')
             },
-            async unsetDiaryInfo(){
-                this.diaryid=''
-                this.diarydate=''
-            },
-            
             async diaryCancel(){
-                this.unsetDiaryInfo()
                 this.$emit('child-click', this.isShowDate)
-            }
+            },
             
         }
     }     

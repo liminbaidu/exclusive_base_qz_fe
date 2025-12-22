@@ -1,6 +1,6 @@
 <template>
     <div v-if="isShowDate=='1'"><diaryEdit ref="diaryEdit" @child-click="parentMethod"></diaryEdit></div>
-    <div v-show="isShowDate=='2'" class="diary">
+    <div v-if="isShowDate=='2'" class="diary">
         <v-tooltip style="margin-top: 10vh; justify-content: center;" v-model="tipVisible" target="cursor" open-on-click>
             <span>{{tip}}</span>
         </v-tooltip>
@@ -134,7 +134,7 @@
                 return datestring;
             },
             async diaryCreate(){
-                diaryEdit.methods.unsetDiaryInfo()
+                this.resetparams()
                 this.isShowDate='1'
             },
             parentMethod(isShowDate) {
@@ -142,10 +142,7 @@
                 this.resetdate()
             },
             resetdate(){
-                this.hasMore=true
-                this.page=1
-                this.diarylist.length=0
-                this.Getdiarylist()
+                this.resetparams()
                 this.reset()
             },
             async diaryEdit(id,data){
@@ -180,9 +177,12 @@
             resetparams(){
                 localStorage.setItem('diaryid', '')
                 localStorage.setItem('diarydate', '')
+                console.log('22')
+                this.hasMore=true
+                this.page=1
+                this.diarylist.length=0
                 this.url=localStorage.getItem('url')
                 this.token=localStorage.getItem('token')
-                console.log(this.token)
             }
             
         }
