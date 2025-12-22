@@ -136,8 +136,6 @@
                 }
                 setTimeout(() => {
                     if (this.page==1 && this.incomelist.length!=0){
-                        this.incomelist.length=0
-                        this.Getincomelist()
                         done('empty');
                         return;
                     }
@@ -196,7 +194,14 @@
                     }
                 }
                 return null;
-            }  
+            },
+            resetparams(){
+                localStorage.setItem('incomeid', '')
+                localStorage.setItem('incomeType', '')
+                localStorage.setItem('incomeRemark', '')
+                localStorage.setItem('incomeAmount', '')
+                localStorage.setItem('incomeSpendTime', '')
+            }
         }
     }     
 </script>

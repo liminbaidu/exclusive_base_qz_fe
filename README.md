@@ -61,6 +61,7 @@ cd leleo-home-page
 
 ```bash
 npm install --package-lock-only
+rm -fr node_modules
 npm install
 ```
 

@@ -7,8 +7,8 @@
         <div class="diary-select" style="margin-top: 0vh; height:10vh">
             <div style="height:8vh"></div>
             <v-btn
-                style="margin-left: 65vw; margin-top: 1vw; width:30vw; height:4vh; background-color:#FFFFFF; "
-                class="text-none"
+                class="diary-button"
+                style="margin-left: 65vw; margin-top: 1vw; width:30vw; height:4vh;"
                 variant="text"
                 @click="diaryCreate()"
                 border
@@ -20,7 +20,7 @@
         <div class="diary-data" style="color: black;" >
             <v-infinite-scroll
                 ref="scroll"
-                style="margin-top: 2.5vh;"
+                style="margin-top: 4vh;"
                 height="80vh"
                 side="end"
                 @load="load"
@@ -75,9 +75,7 @@
             return { xs,sm,md,reset};
         },
         async mounted(){
-            this.url=localStorage.getItem('url')
-            this.token=localStorage.getItem('token')
-            await this.Getdiarylist();
+            this.resetparams();
         },
         methods:{
             async Getdiarylist(){
@@ -179,6 +177,13 @@
                 this.tipVisible=false
                 }, 3000);
             },
+            resetparams(){
+                localStorage.setItem('diaryid', '')
+                localStorage.setItem('diarydate', '')
+                this.url=localStorage.getItem('url')
+                this.token=localStorage.getItem('token')
+                console.log(this.token)
+            }
             
         }
     }     

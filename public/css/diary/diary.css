@@ -6,9 +6,24 @@
     z-index: -1;
     font-family: "Ma Shan Zheng", "STKaiti", "KaiTi", serif;
 }
+.diary-button{
+    border-radius: 8px; opacity: 0.75;
+    background-color:#f2f595;
+}
 .diary-data-card{
     border:2px solid #e4f3ff; border-radius: 8px; opacity: 0.75; background-color:#FFFFFF; width:92vw; color: black; margin-bottom:1vh; margin-left:4vw;;
 }
 .diary-data-card-button{
     background-color:#fbf6bf; color:#000000;
+}
+.diary-edit-filedTextarea{
+    border:2px solid #0981e4; border-radius: 12px; opacity: 0.75;
+    background-color:#FFFFFF;
+}
+.v-textarea:focus-within {
+    border:3px solid #0688f2;
+}
+.diary-edit-button{
+    border-radius: 8px; opacity: 0.8;
+    background-color:#0981e4;
 }

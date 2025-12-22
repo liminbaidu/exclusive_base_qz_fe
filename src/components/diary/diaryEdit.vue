@@ -6,25 +6,26 @@
         <div>&nbsp</div>
         <div class="diary-select" style="margin-top: 10vh; margin-left:10vw; height:35vh; width:80vw;">
             <v-textarea
+              class="diary-edit-filedTextarea"
               v-model="diarydate"
               density="compact"
               placeholder="请输入内容"
-              variant="outlined"
+              variant="Underlined"
               hideDetails=""
-              style="margin-top: 0vh; height:30vh; width:80vw; background-color:#FFFFFF; opacity: 0.85;"
+              style="margin-top: 0vh; height:30vh; width:80vw;"
             ></v-textarea>
             <v-btn
-                color="blue"
+                class="diary-edit-button"
                 block
-                style="margin-top: 1.5vh; opacity: 0.85;"
+                style="margin-top: 1.5vh;"
                 @click="diaryEdit()"
             >
                 上传
             </v-btn>
             <v-btn
-                color="blue"
+                class="diary-edit-button"
                 block
-                style="margin-top: 1.5vh; opacity: 0.85; width:25vw;"
+                style="margin-top: 1.5vh; width:25vw;"
                 @click="diaryCancel()"
             >
                 取消
@@ -73,11 +74,8 @@
                         if (resp['BaseResp']['StatusCode']==0) {
                             this.unsetDiaryInfo()
                             this.$emit('child-click', this.isShowDate)
-                            // localStorage.setItem('bottomtab', '2')
-                            // window.open('/', '_self')
                         }else{
                             this.tip=resp['BaseResp']['StatusMessage'];
-                            console.log(this.tip);
                             this.tipVisible=true;
                             this.closetip();
                         }
