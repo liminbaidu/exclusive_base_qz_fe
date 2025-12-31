@@ -88,7 +88,6 @@ import { useDisplay } from 'vuetify'
             return { xs,sm,md};
         },
         async mounted(){
-            await this.Getdiarylist();
         },
         methods:{
             load ({ done }) {

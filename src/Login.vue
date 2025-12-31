@@ -59,7 +59,7 @@
     },
     data(){
       return{
-        user:'',
+        user:'qunzai',
         password:'',
         islogin:false,
         isloading:false,

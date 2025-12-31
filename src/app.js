@@ -20,10 +20,10 @@ export default {
   setup() {
     const { xs,sm,md } = useDisplay();
     return { xs,sm,md };
-    this.getToken();
   },
   data() {
     return {
+      islogin:false,
       token:'',
       bottomtab:"1",
       isShowTab:"1",
@@ -78,7 +78,8 @@ export default {
     };
   },
   async mounted() {
-    console.log(localStorage.getItem('bottomtab'))
+    this.getToken();
+    this.checkIslogin();
     if (localStorage.getItem('bottomtab')!=undefined){
       this.bottomtab=localStorage.getItem('bottomtab')
       this.isShowTab=localStorage.getItem('bottomtab')
@@ -302,6 +303,27 @@ export default {
       this.token=localStorage.getItem('token')
       console.log(this.token)
     },
+    async checkIslogin(){
+        this.isloading=true
+        const response = await fetch(
+          this.configdata.url+`/common/islogin?token=${this.token}`,
+          {
+            headers:{
+              "cookie": this.cookie,
+            }
+          }
+        )
+        response.json().then((logresp)=>{
+          if (logresp['isLogin']=="false") {
+            this.islogin = false;
+            window.open('/#/login', '_self')
+          }else{
+            this.islogin = true;
+          }
+        })
+        this.isloading=false
+        console.log(this.islogin,"22")
+      },
     
     musicplayershow(val) {
       this.ismusicplayer = val;
